@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "name": "@joly_snow/guess_the_number",
+  "version": "1.0.0",
+  "main": "guess_the_number.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/BeerDealer/homework.git"
+  },
+  "bin": {
+    "guess": "guess_the_number.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "joly_snow",
+  "license": "ISC",
+  "description": "Mini game"
+}
