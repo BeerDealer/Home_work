@@ -1,0 +1,40 @@
+1. docker pull node 
+
+Using default tag: latest
+latest: Pulling from library/node
+7bb465c29149: Pull complete
+2b9b41aaa3c5: Pull complete
+49b40be4436e: Pull complete
+c558fac597f8: Pull complete
+449619e06fe3: Pull complete
+586631916d9c: Pull complete
+8020d38d3250: Pull complete
+38b1ded32c48: Pull complete
+Digest: sha256:65998e325b06014d4f1417a8a6afb1540d1ac66521cca76f2221a6953947f9ee
+Status: Downloaded newer image for node:latest
+docker.io/library/node:latest
+
+2. docker run --env NAME=Артём --env SURNAME=Пашинин --name mynode -it node
+
+Welcome to Node.js v21.6.2.
+Type ".help" for more information.
+> `Привет, ${process.env.NAME} ${process.env.SURNAME}!`
+'Привет, Артём Пашинин!'
+
+3. docker rm mynode
+
+mynode
+
+4. docker rmi node  
+
+Untagged: node:latest
+Untagged: node@sha256:65998e325b06014d4f1417a8a6afb1540d1ac66521cca76f2221a6953947f9ee
+Deleted: sha256:1b9d5f3b36bfd39fa919ff2ef7fbcc5ee6b983b2c40d558208a549428074a42e
+Deleted: sha256:9f6cb7803b9bbb76aa8f3806835b5e7e0dec8e59688aef3f9f86f7a0f1035d15
+Deleted: sha256:cbb9d85c8f2d27d547d8b19457833719f833cd4c3044342f027f1efebea6c2ed
+Deleted: sha256:dd57a652659145b79f63caf4c7a8fff46789238fb9620f2bae8492cd95595b44
+Deleted: sha256:7ed3e2d59eb77380fed7705e32f729699580714b9d5ad9a4fee63cad14bc55c2
+Deleted: sha256:74f42f006855896bfec5d4b0aa1e8e8fafc99cfffdd02b815e7d5e56945771c4
+Deleted: sha256:7ac67e411506612ade9221362df05488f5b54413d8cf71ce1e5f37e1577ddcdd
+Deleted: sha256:dec6601e3c2d74e8815d49fd48cec1b2a3bb8c583b23fcb0629cb704f94d5a8f
+Deleted: sha256:1a5fc1184c481caeb279bce728e080daba423b5215282318ba86e9b8c388a2b4

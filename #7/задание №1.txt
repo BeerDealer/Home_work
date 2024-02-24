@@ -1,0 +1,69 @@
+1. docker pull busybox
+
+latest: Pulling from library/busybox
+9ad63333ebc9: Pull complete
+Digest: sha256:6d9ac9237a84afe1516540f40a0fafdc86859b2141954b4d643af7066d598b74
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+
+2. docker run --name pinger -d busybox ping -c 7 netology.ru
+
+52bf11388bf560714fed40d8717a75f8de1ca89e9cd88965fcddc9e2c199e15c
+
+3. docker ps -a
+
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                      PORTS     NAMES
+43382363528f   busybox   "ping -c 7 netology.…"   47 minutes ago   Exited (0) 47 minutes ago             pinger
+
+4. docker logs -t pinger
+
+2024-02-24T17:27:00.122042269Z PING netology.ru (188.114.98.224): 56 data bytes
+2024-02-24T17:27:00.122078069Z 64 bytes from 188.114.98.224: seq=0 ttl=63 time=5.346 ms
+2024-02-24T17:27:01.121057329Z 64 bytes from 188.114.98.224: seq=1 ttl=63 time=4.257 ms
+2024-02-24T17:27:02.121890091Z 64 bytes from 188.114.98.224: seq=2 ttl=63 time=4.858 ms
+2024-02-24T17:27:03.121490752Z 64 bytes from 188.114.98.224: seq=3 ttl=63 time=4.426 ms
+2024-02-24T17:27:04.121364773Z 64 bytes from 188.114.98.224: seq=4 ttl=63 time=4.188 ms
+2024-02-24T17:27:05.121892318Z 64 bytes from 188.114.98.224: seq=5 ttl=63 time=4.508 ms
+2024-02-24T17:27:06.122192963Z 64 bytes from 188.114.98.224: seq=6 ttl=63 time=4.629 ms
+2024-02-24T17:27:06.122222663Z 
+2024-02-24T17:27:06.122231263Z --- netology.ru ping statistics ---
+2024-02-24T17:27:06.122234363Z 7 packets transmitted, 7 packets received, 0% packet loss
+2024-02-24T17:27:06.122237163Z round-trip min/avg/max = 4.188/4.601/5.346 ms
+
+5. docker run --name pinger -d busybox ping -c 7 netology.ru
+
+docker: Error response from daemon: Conflict. The container name "/pinger" is already in use by container "52bf11388bf560714fed40d8717a75f8de1ca89e9cd88965fcddc9e2c199e15c".
+You have to remove (or rename) that container to be able to reuse that name.
+
+6. docker ps -a
+
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS                          PORTS     NAMES
+52bf11388bf5   busybox   "ping -c 7 netology.…"   About a minute ago   Exited (0) About a minute ago             pinger
+
+7. docker logs -t pinger
+
+2024-02-24T17:27:00.122042269Z PING netology.ru (188.114.98.224): 56 data bytes
+2024-02-24T17:27:00.122078069Z 64 bytes from 188.114.98.224: seq=0 ttl=63 time=5.346 ms
+2024-02-24T17:27:01.121057329Z 64 bytes from 188.114.98.224: seq=1 ttl=63 time=4.257 ms
+2024-02-24T17:27:02.121890091Z 64 bytes from 188.114.98.224: seq=2 ttl=63 time=4.858 ms
+2024-02-24T17:27:03.121490752Z 64 bytes from 188.114.98.224: seq=3 ttl=63 time=4.426 ms
+2024-02-24T17:27:04.121364773Z 64 bytes from 188.114.98.224: seq=4 ttl=63 time=4.188 ms
+2024-02-24T17:27:05.121892318Z 64 bytes from 188.114.98.224: seq=5 ttl=63 time=4.508 ms
+2024-02-24T17:27:06.122192963Z 64 bytes from 188.114.98.224: seq=6 ttl=63 time=4.629 ms
+2024-02-24T17:27:06.122222663Z
+2024-02-24T17:27:06.122231263Z --- netology.ru ping statistics ---
+2024-02-24T17:27:06.122234363Z 7 packets transmitted, 7 packets received, 0% packet loss
+2024-02-24T17:27:06.122237163Z round-trip min/avg/max = 4.188/4.601/5.346 ms
+
+1 запуск, 7 запросов.
+
+8. docker rm -f pinger
+
+pinger
+
+9. docker rmi busybox
+
+Untagged: busybox:latest
+Untagged: busybox@sha256:6d9ac9237a84afe1516540f40a0fafdc86859b2141954b4d643af7066d598b74
+Deleted: sha256:3f57d9401f8d42f986df300f0c69192fc41da28ccc8d797829467780db3dd741
+Deleted: sha256:2e112031b4b923a873c8b3d685d48037e4d5ccd967b658743d93a6e56c3064b9
