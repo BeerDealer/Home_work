@@ -7,3 +7,5 @@
 \#5/node_modules
 \#6/.env
 \#6/node_modules
+\#8/count_server/node_modules
+\#8/book_server/node_modules

@@ -1,0 +1,41 @@
+services:
+  storage:
+    image: redis
+    volumes:
+      - ./data:/data
+    networks:
+      - net
+  counter-service:
+    image: counter
+    build:
+      context: ./count_server
+      dockerfile: Dockerfile
+    ports:
+      - 85:3000
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://storage
+    depends_on:
+      - storage
+    networks:
+      - net
+  books:
+    image: books
+    volumes:
+      - ./book_server/:/app
+    build:
+      context: ./book_server
+      dockerfile: Dockerfile
+    ports:
+      - 80:3000
+    environment:
+      - PORT=3000
+      - COUNTER_URL=counter-service
+    depends_on:
+      - counter-service
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
