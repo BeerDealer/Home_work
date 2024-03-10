@@ -1,0 +1,19 @@
+{
+  "name": "9ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx src",
+    "build": "npx tsc -p ./tsconfig.json --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.2"
+  }
+}
