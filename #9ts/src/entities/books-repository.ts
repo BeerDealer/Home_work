@@ -2,7 +2,8 @@ import { Book } from "../interfaces/book";
 
 class BooksRepository {
   createBook(book: Book): void {}
-  getBook(id: string): Book | undefined {}
+  getBook(id: string) {
+  }
   getBooks(): Array<Book> {
     return [];
   }
