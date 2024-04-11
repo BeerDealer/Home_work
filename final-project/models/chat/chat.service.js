@@ -1,9 +1,13 @@
 const Chat = require("./chat.model");
+const EventEmitter = require("events");
 const Message = require("./message.model");
 const { Types } = require("mongoose");
 const { ObjectId } = Types;
 
-class ChatService {
+class ChatService extends EventEmitter {
+  constructor() {
+    super();
+  }
   async find(users) {
     try {
       const chat = await Chat.find({ users: { $all: users } });
@@ -35,10 +39,24 @@ class ChatService {
         text: text,
       });
       await Chat.updateOne({ _id: chat._id }, { $push: { messages: message } });
+      this.emit("newMessage", { message: message, chatId: chat._id });
       return message;
     } catch (e) {
       return { err: e, message: e.Message };
     }
+  }
+
+  async getHistory(id) {
+    try {
+      const { messages } = await Chat.find({ _id: id });
+      return messages;
+    } catch (e) {
+      return { err: e, message: e.Message };
+    }
+  }
+
+  subscribe(callback) {
+    this.on("newMessage", callback);
   }
 }
 
