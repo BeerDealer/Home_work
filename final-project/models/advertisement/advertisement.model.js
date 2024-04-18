@@ -1,11 +1,6 @@
-const { Schema, model, ObjectId } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const Advertisement = new Schema({
-  _id: {
-    type: ObjectId,
-    required: true,
-    unique: true,
-  },
   shortText: {
     type: String,
     required: true,

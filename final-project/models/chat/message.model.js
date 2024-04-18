@@ -1,11 +1,6 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, ObjectId } = require("mongoose");
 
 const Message = new Schema({
-  _id: {
-    type: ObjectId,
-    required: true,
-    unique: true,
-  },
   author: {
     type: ObjectId,
     required: true,
@@ -23,4 +18,5 @@ const Message = new Schema({
   },
 });
 
-modeule.exports = model("Message", Message);
+module.MessageModel = model("Message", Message);
+module.Message = Message;

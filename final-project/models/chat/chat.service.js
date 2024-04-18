@@ -1,6 +1,6 @@
 const Chat = require("./chat.model");
 const EventEmitter = require("events");
-const Message = require("./message.model");
+const { MessageModel } = require("./message.model");
 const { Types } = require("mongoose");
 const { ObjectId } = Types;
 
@@ -32,7 +32,7 @@ class ChatService extends EventEmitter {
           messages: [],
         });
       }
-      const message = new Message({
+      const message = new MessageModel({
         _id: ObjectId(),
         author: author,
         sentAt: new Date(),
