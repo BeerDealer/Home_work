@@ -1,0 +1,31 @@
+<%- include('./port/layout-start.ejs', {title: title}) %> 
+
+
+
+
+<form action="/api/user/logout" method="post">
+    <div class="container">
+      <div class="row justify-content-center mt-4">
+          <table class="table table-borderless">
+              <tbody>
+              <tr>
+                  <td>Имя:</td>
+                  <td><%= username %></td>
+              </tr>
+              <tr>
+                  <td>Email:</td>
+                  <td><%= emails %></td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="row">
+        <div class="col-12 mt-4 d-flex justify-content-center">
+          <input type="submit" value="Выйти" class="btn btn-primary" /> 
+        </div>
+      </div>
+    </div>
+  </form>
+  
+
+<%- include('./port/layout-end.ejs') %>
