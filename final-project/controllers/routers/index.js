@@ -1,4 +1,5 @@
-const signupRouter = require("./api.signup");
-const test = require("./test");
+const signupRoute = require("./api.signup");
+const signinRoute = require("./api.signin");
+const adversimentsRoute = require("./api.signin");
 
-module.exports = [signupRouter, test];
+module.exports = [signupRoute, signinRoute, adversimentsRoute];

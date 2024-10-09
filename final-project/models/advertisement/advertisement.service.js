@@ -1,37 +1,48 @@
 const { Advertisement } = require("./advertisement.model");
 
 class AdvertisementService {
-  async find(params = { shortText: "", description: "", userId: 0, tags: [] }) {
+  static async find(
+    params = { shortText: "", description: "", userId: 0, tags: [] }
+  ) {
     const shortTextRegex = new RegExp(params.shortText);
     const descriptionRegex = new RegExp(params.description);
     try {
       const advertisement = await Advertisement.find({
-        $and: [
-          { shortText: shortTextRegex },
-          { description: descriptionRegex },
-          { userId: params.userId },
-          { tags: { $all: params.tags } },
-        ],
+        shortText: shortTextRegex,
+        description: descriptionRegex,
+        userId: params.userId,
+        tags: { $all: params.tags },
       });
       return advertisement;
     } catch (e) {
-      return { err: e, message: e.Message };
+      throw new Error(e.message);
     }
   }
 
-  async create(data) {
+  static async findalAll() {
     try {
-      new Advertisement(data);
+      const advertisements = await Advertisement.find();
+      return advertisements;
     } catch (e) {
-      return { err: e, message: e.Message };
+      throw new Error(e.message);
     }
   }
-  async remove(id) {
+
+  static async create(data) {
+    try {
+      const advertisement = new Advertisement(data);
+      await advertisement.save();
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+
+  static async remove(id) {
     try {
       await Advertisement.findOneAndUpdate({ _id: id }, { isDeleted: true });
       return { message: "Ok" };
     } catch (e) {
-      return { err: e, message: e.Message };
+      throw new Error(e.message);
     }
   }
 }
