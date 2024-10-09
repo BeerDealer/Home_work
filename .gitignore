@@ -16,3 +16,5 @@
 \#11/tsconfig.tsbuildinfo
 \#12/node_modules
 \final-project/node_modules
+\nestjs-ext/node_modules
+\nestjs-ext/dist
