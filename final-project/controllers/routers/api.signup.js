@@ -4,10 +4,10 @@ const bcrypt = require("bcryptjs");
 
 const router = Router();
 
-router.post("/api/signup", async (req, res, next) => {
+router.post("/api/signup", async (req, res) => {
   const { email, password, name, contactPhone } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = bcrypt.hash(password, 10);
     console.log(UserService);
     const user = await UserService.create({
       email: email,
@@ -20,7 +20,10 @@ router.post("/api/signup", async (req, res, next) => {
       status: "Ok",
     });
   } catch (e) {
-    next(e);
+    res.status(500).json({
+      error: e.message,
+      status: "error",
+    });
   }
 });
 
