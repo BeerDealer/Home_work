@@ -21,3 +21,6 @@
 \nestjs-db/node_modules
 \nestjs-db/.env
 \nestjs-db/dist
+\rxjs/node_modules
+\rxjs/.env
+\rxjs/dist
