@@ -6,7 +6,7 @@ export class JokeController {
   constructor(private readonly jokeService: JokeService) {}
 
   @Get()
-  public getJoke(@Query('count') count: number = 1): Promise<any[]> {
+  public getJoke(@Query('count') count: number = 1) {
     const jokes = this.jokeService.getJoke(count);
     return jokes;
   }

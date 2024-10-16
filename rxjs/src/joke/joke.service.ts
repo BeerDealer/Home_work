@@ -17,9 +17,17 @@ export class JokeService {
     );
   }
 
-  public async getJoke(count: number): Promise<any[]> {
+  public async getJoke(count: number) {
     const requests = Array.from({ length: count }, () => this.sendRequest());
-    const results$ = forkJoin(requests);
+    const results$ = forkJoin(requests).pipe(
+      map((jokes) =>
+        jokes.filter(
+          (joke) => joke.setup !== undefined && joke.delivery !== undefined,
+        ),
+      ),
+    );
+
+    results$.subscribe(() => {});
     return await firstValueFrom(results$);
   }
 }

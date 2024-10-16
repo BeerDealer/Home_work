@@ -24,3 +24,5 @@
 \rxjs/node_modules
 \rxjs/.env
 \rxjs/dist
+\nestjs-validation/dist
+\nestjs-validation/node_modules
