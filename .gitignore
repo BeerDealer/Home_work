@@ -26,3 +26,5 @@
 \rxjs/dist
 \nestjs-validation/dist
 \nestjs-validation/node_modules
+\hostels/node_modules
+\hostels/dist
