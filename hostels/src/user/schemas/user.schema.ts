@@ -6,7 +6,7 @@ export type UserDocument = User & Document;
 
 @Schema({ toObject: { versionKey: false } })
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true })
@@ -15,10 +15,10 @@ export class User {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop()
   contactPhone: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: UserRole.CLIENT })
   role: UserRole;
 }
 

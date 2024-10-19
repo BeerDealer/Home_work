@@ -1,5 +1,5 @@
 import { User } from '../schemas/user.schema';
-import { ID } from '../types/id.type';
+import { ID } from '../../types/id.type';
 import { ISearchUserParams } from './search-user-params.interface';
 import { IUser } from './user.interface';
 

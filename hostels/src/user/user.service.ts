@@ -5,7 +5,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Connection, Model } from 'mongoose';
 import { ISearchUserParams } from './interfaces/search-user-params.interface';
-import { ID } from './types/id.type';
+import { ID } from '../types/id.type';
 
 @Injectable()
 export class UserService implements IUserService {
