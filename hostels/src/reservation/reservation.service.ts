@@ -20,21 +20,25 @@ export class ReservationService implements IReservationService {
       hotelId: data.hotelId,
       roomId: data.roomId,
       $or: [
-        { dateStart: { $gte: data.dateEnd } },
-        { dateEnd: { $lte: data.dateStart } },
+        { dateStart: { $lt: data.dateEnd, $gte: data.dateStart } },
+        { dateEnd: { $gt: data.dateStart, $lte: data.dateEnd } },
       ],
     });
-    if (existReservation) {
+    if (existReservation.length === 0) {
       const reservation = new this.ReservationModel(data);
       return await reservation.save();
     }
     return existReservation[0];
   }
+
   public async removeReservation(id: ID): Promise<void> {
     this.ReservationModel.findByIdAndDelete(id);
   }
 
-  getReservations(filter: IReservationSearchOptions): Promise<Reservation[]> {
-    throw new Error('Method not implemented.');
+  public async getReservations(
+    filter: IReservationSearchOptions,
+  ): Promise<Reservation[]> {
+    const reservation = await this.ReservationModel.find(filter);
+    return reservation;
   }
 }
