@@ -10,7 +10,6 @@ import { Connection, Model } from 'mongoose';
 import { ISupportRequestClientService } from './interfaces/support-request-client-service.interface';
 import { ICreateSupportRequestDto } from './interfaces/dto/create-support-request.dto';
 import { IMarkMessagesAsReadDto } from './interfaces/dto/mark-message-as-read.dto';
-import { User, UserDocument } from 'src/user/schemas/user.schema';
 
 @Injectable()
 export class SupportRequestClientService
