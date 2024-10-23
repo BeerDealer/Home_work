@@ -25,7 +25,7 @@ export class AuthService {
     if (user) {
       return this.createToken(signinData);
     }
-    throw new HttpException('INcorrect email/paww', HttpStatus.BAD_REQUEST);
+    throw new HttpException('INcorrect email/pass', HttpStatus.BAD_REQUEST);
   }
 
   public createToken(payload: any): string {

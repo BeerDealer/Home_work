@@ -3,9 +3,10 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UserRepository } from './user.repository';
 import { AuthModule } from 'src/auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [forwardRef(() => AuthModule)],
+  imports: [ConfigModule, forwardRef(() => AuthModule)],
   controllers: [UserController],
   providers: [UserService, UserRepository],
   exports: [UserService],
