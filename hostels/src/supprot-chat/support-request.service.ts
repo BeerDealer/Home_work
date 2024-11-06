@@ -24,29 +24,60 @@ export class SupportRequestService implements ISupportRequestService {
   public async findSupportRequests(
     params: IGetChatListParams,
   ): Promise<SupportRequest[]> {
-    const supportRequest = await this.SupportRequestModel.find({
-      userId: params.user,
-      isActive: params.isActive,
-    });
+    const query: any = {};
+    if (params.userId) query.userId = params.userId;
+    if (params.isActive) query.isActive = params.isActive;
+    const supportRequest = await this.SupportRequestModel.find(query)
+      .skip(params.offset)
+      .limit(params.limit);
     return supportRequest;
   }
 
   public async sendMessage(data: ISendMessageDto): Promise<Message> {
-    const message = new this.MessageModel(data);
-    return await message.save();
+    const message = new this.MessageModel({
+      ...data,
+      sentAt: new Date(),
+      readAt: null,
+    });
+    await message.save();
+    await this.SupportRequestModel.findByIdAndUpdate(data.supportRequest, {
+      $push: { messages: message._id },
+    });
+    return message;
   }
 
   public async getMessages(supportRequest: ID): Promise<Message[]> {
-    const { messages } =
-      await this.SupportRequestModel.findById(supportRequest).populate(
-        'messages',
-      );
+    const { messages } = await this.SupportRequestModel.findById(
+      supportRequest,
+    ).populate({
+      path: 'messages',
+      populate: {
+        path: 'author',
+        select: 'id, name',
+      },
+      select: '-__v',
+    });
+
     return messages;
   }
 
   subscribe(
     handler: (supportRequest: SupportRequest, message: Message) => void,
   ): () => void {
-    throw new Error('Method not implemented.');
+    const subscription = this.SupportRequestModel.watch().on(
+      'change',
+      async (change) => {
+        if (change.operationType === 'insert') {
+          const newMessageId =
+            change.fullDocument.messages[
+              change.fullDocument.messages.length - 1
+            ];
+          const newMessage = await this.MessageModel.findById(newMessageId);
+          handler(change.fullDocument, newMessage);
+        }
+      },
+    );
+
+    return () => subscription.close();
   }
 }

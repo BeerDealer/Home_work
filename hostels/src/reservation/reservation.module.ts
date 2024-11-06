@@ -19,5 +19,6 @@ import { ReservationService } from './reservation.service';
     ]),
   ],
   providers: [ReservationService],
+  exports: [ReservationService],
 })
 export class ReservationModule {}

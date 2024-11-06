@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IReservationService } from './interfaces/reservation-service.interface';
 import { ID } from 'src/types/id.type';
 import { IReservationDto } from './interfaces/dto/reservation.dto';
@@ -15,6 +15,10 @@ export class ReservationService implements IReservationService {
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
+  public async getReservationById(id: ID): Promise<Reservation> {
+    return await this.ReservationModel.findById(id);
+  }
+
   public async addReservation(data: IReservationDto): Promise<Reservation> {
     const existReservation = await this.ReservationModel.find({
       hotelId: data.hotelId,
@@ -24,21 +28,57 @@ export class ReservationService implements IReservationService {
         { dateEnd: { $gt: data.dateStart, $lte: data.dateEnd } },
       ],
     });
+    console.log(existReservation);
     if (existReservation.length === 0) {
       const reservation = new this.ReservationModel(data);
-      return await reservation.save();
+      const savedReservation = await reservation.save();
+      return (
+        await this.ReservationModel.findById(savedReservation._id)
+          .select('-__v -_id')
+          .populate([
+            {
+              path: 'hotelId',
+              select: 'title description -_id',
+              model: 'Hotel',
+            },
+            {
+              path: 'roomId',
+              select: 'description images -_id',
+              model: 'HotelRoom',
+            },
+          ])
+      ).toObject();
     }
-    return existReservation[0];
+    throw new HttpException('Бронь недоступна', HttpStatus.BAD_REQUEST);
   }
 
   public async removeReservation(id: ID): Promise<void> {
-    this.ReservationModel.findByIdAndDelete(id);
+    await this.ReservationModel.findByIdAndDelete(id);
   }
 
   public async getReservations(
     filter: IReservationSearchOptions,
   ): Promise<Reservation[]> {
-    const reservation = await this.ReservationModel.find(filter);
-    return reservation;
+    const query: any = { userId: filter.userId };
+    if (filter.dateEnd) query.dateEnd = filter.dateEnd;
+    if (filter.dateStart) query.dateStart = filter.dateStart;
+    console.log(query);
+    const reservations = await this.ReservationModel.find(query)
+      .select('-__v -_id')
+      .populate([
+        {
+          path: 'hotelId',
+          select: 'title description -_id',
+          model: 'Hotel',
+        },
+        {
+          path: 'roomId',
+          select: 'description images -_id',
+          model: 'HotelRoom',
+        },
+      ]);
+    if (reservations)
+      return reservations.map((reservation) => reservation.toObject());
+    return [];
   }
 }

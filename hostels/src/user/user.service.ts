@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IUserService } from './interfaces/user-service.interface';
 import { IUser } from './interfaces/user.interface';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
@@ -6,6 +6,8 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Connection, Model } from 'mongoose';
 import { ISearchUserParams } from './interfaces/search-user-params.interface';
 import { ID } from '../types/id.type';
+import { IUserCreateDto } from './interfaces/dto/user-create.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -25,18 +27,41 @@ export class UserService implements IUserService {
   }
 
   public async findAll(params: ISearchUserParams): Promise<User[]> {
-    const users = await this.UserModel.find({
-      name: { $regex: params.name, $options: 'i' },
-      email: { $regex: params.email, $options: 'i' },
-      contactPhone: { $regex: params.contactPhone, $options: 'i' },
-    })
+    const query: any = {};
+
+    if (params.name) {
+      query.name = { $regex: params.name, $options: 'i' };
+    }
+    if (params.email) {
+      query.email = { $regex: params.email, $options: 'i' };
+    }
+    if (params.contactPhone) {
+      query.contactPhone = { $regex: params.contactPhone, $options: 'i' };
+    }
+
+    const users = await this.UserModel.find(query)
+      .select('-_id -__v')
       .skip(params.offset)
       .limit(params.limit);
+
     return users;
   }
 
-  public async create(data: Partial<IUser>): Promise<User> {
-    const user = new this.UserModel(data);
-    return await user.save();
+  public async create(data: IUserCreateDto): Promise<User> {
+    const saltOrRounds = 10;
+    const password = data.password;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    const userData: Partial<User> = {
+      passwordHash: hash,
+      email: data.email,
+      name: data.name,
+      role: data.role,
+    };
+    try {
+      const user = new this.UserModel(userData);
+      return await user.save();
+    } catch (err) {
+      throw new HttpException('Email занят', HttpStatus.BAD_REQUEST);
+    }
   }
 }

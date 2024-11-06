@@ -7,7 +7,7 @@ import { SupportRequest } from '../schemas/support-request.schema';
 export interface ISupportRequestService {
   findSupportRequests(params: IGetChatListParams): Promise<SupportRequest[]>;
   sendMessage(data: ISendMessageDto): Promise<Message>;
-  getMessages(supportRequest: ID): Promise<Message[]>;
+  getMessages(supportRequest: ID);
   subscribe(
     handler: (supportRequest: SupportRequest, message: Message) => void,
   ): () => void;

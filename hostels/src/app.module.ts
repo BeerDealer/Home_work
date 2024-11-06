@@ -8,6 +8,8 @@ import { HotelModule } from './hotel/hotel.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { SupprotChatModule } from './supprot-chat/supprot-chat.module';
 import { ApiModule } from './api/api.module';
+import { AuthModule } from './auth/auth.module';
+import { UserManagementModule } from './user-management/user-management.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ApiModule } from './api/api.module';
     ReservationModule,
     SupprotChatModule,
     ApiModule,
+    AuthModule,
+    UserManagementModule,
   ],
   controllers: [AppController],
   providers: [AppService],

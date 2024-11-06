@@ -10,6 +10,7 @@ import { Connection, Model } from 'mongoose';
 import { ISupportRequestClientService } from './interfaces/support-request-client-service.interface';
 import { ICreateSupportRequestDto } from './interfaces/dto/create-support-request.dto';
 import { IMarkMessagesAsReadDto } from './interfaces/dto/mark-message-as-read.dto';
+import { SupportRequestService } from './support-request.service';
 
 @Injectable()
 export class SupportRequestClientService
@@ -19,27 +20,32 @@ export class SupportRequestClientService
     @InjectModel(SupportRequest.name)
     private readonly SupportRequestModel: Model<SupportRequsetDocument>,
     @InjectModel(Message.name)
+    private readonly MessageModel: Model<MessageDocument>,
     @InjectConnection()
     private readonly connection: Connection,
+    private readonly supportRequestService: SupportRequestService,
   ) {}
 
   public async createSupportRequest(
     data: ICreateSupportRequestDto,
   ): Promise<SupportRequest> {
-    const supportRequest = new this.SupportRequestModel(data);
+    const supportRequest = new this.SupportRequestModel({
+      ...data,
+      isActive: true,
+    });
     return await supportRequest.save();
   }
 
   public async markMessagesAsRead(
     params: IMarkMessagesAsReadDto,
   ): Promise<void> {
-    const supportRequest = await this.SupportRequestModel.findById(
+    const messages = await this.supportRequestService.getMessages(
       params.supportRequest,
     );
 
     const currentDate = new Date();
 
-    const unreadMessages = supportRequest.messages.filter((message) => {
+    const unreadMessages = messages.filter((message) => {
       return (
         message.author.toString() === params.user.toString() &&
         !message.readAt &&
@@ -47,11 +53,11 @@ export class SupportRequestClientService
       );
     });
 
-    unreadMessages.forEach((message) => {
-      message.readAt = currentDate;
-    });
-
-    await supportRequest.save();
+    for (const message of unreadMessages) {
+      const messageDoc = await this.MessageModel.findById(message._id);
+      messageDoc.readAt = currentDate;
+      await messageDoc.save();
+    }
   }
 
   public async getUnreadCount(supportRequest: ID): Promise<number> {

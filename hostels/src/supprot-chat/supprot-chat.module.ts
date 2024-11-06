@@ -6,6 +6,9 @@ import {
   SupportRequest,
   SupportRequsetSchema,
 } from './schemas/support-request.schema';
+import { SupportRequestService } from './support-request.service';
+import { SupportRequestClientService } from './support-request-client.service';
+import { SupportRequestEmployeeService } from './support-request-employee.service';
 
 @Module({
   imports: [
@@ -14,6 +17,16 @@ import {
       { name: Message.name, schema: MessageSchema },
       { name: SupportRequest.name, schema: SupportRequsetSchema },
     ]),
+  ],
+  providers: [
+    SupportRequestService,
+    SupportRequestClientService,
+    SupportRequestEmployeeService,
+  ],
+  exports: [
+    SupportRequestService,
+    SupportRequestClientService,
+    SupportRequestEmployeeService,
   ],
 })
 export class SupprotChatModule {}

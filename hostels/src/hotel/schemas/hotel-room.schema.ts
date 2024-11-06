@@ -1,12 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 
 export type HotelRoomDocument = HotelRoom & Document;
 
-@Schema({ toObject: { versionKey: false }, timestamps: true })
+@Schema({
+  toObject: {
+    versionKey: false,
+    transform: (doc, ret) => {
+      delete ret.createdAt;
+      delete ret.updatedAt;
+      return ret;
+    },
+  },
+  timestamps: true,
+})
 export class HotelRoom {
-  @Prop({ ref: 'Hotel' })
-  hotel: ObjectId;
+  _id: ObjectId;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Hotel', required: true })
+  hotel: string;
 
   @Prop()
   description: string;
