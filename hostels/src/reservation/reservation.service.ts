@@ -16,7 +16,10 @@ export class ReservationService implements IReservationService {
   ) {}
 
   public async getReservationById(id: ID): Promise<Reservation> {
-    return await this.ReservationModel.findById(id);
+    const reservation = await this.ReservationModel.findById(id);
+    if (!reservation)
+      throw new HttpException('Бронь не существует', HttpStatus.BAD_REQUEST);
+    return reservation;
   }
 
   public async addReservation(data: IReservationDto): Promise<Reservation> {

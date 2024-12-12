@@ -23,6 +23,9 @@ export class UserService implements IUserService {
 
   public async findByEmail(email: string): Promise<User> {
     const user = await this.UserModel.findOne({ email: email });
+    if (!user) {
+      throw new HttpException('Пользователь не найден', HttpStatus.BAD_REQUEST);
+    }
     return user;
   }
 
@@ -61,7 +64,9 @@ export class UserService implements IUserService {
       const user = new this.UserModel(userData);
       return await user.save();
     } catch (err) {
-      throw new HttpException('Email занят', HttpStatus.BAD_REQUEST);
+      if (err.message.includes('E11000'))
+        throw new HttpException('Email занят', HttpStatus.BAD_REQUEST);
+      else throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

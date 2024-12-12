@@ -85,13 +85,7 @@ export class AdminController {
     )
     multerImagesArray: Express.Multer.File[],
   ) {
-    const hotel = await this.hotelService.findById(body.hotel);
-    if (!hotel) {
-      throw new HttpException(
-        'Гостиница не существует',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.hotelService.findById(body.hotel);
     const images = multerImagesArray.map((file) => file.path);
     body.images = images;
     const hotelRoom = await this.hotelRoomService.create(body);
@@ -117,19 +111,10 @@ export class AdminController {
     )
     multerImagesArray: Express.Multer.File[],
   ) {
-    const hotel = await this.hotelService.findById(body.hotel);
+    await this.hotelService.findById(body.hotel);
     const hotelRoom = await this.hotelRoomService.findById(id);
     const images = multerImagesArray.map((file) => file.path);
 
-    if (!hotel) {
-      throw new HttpException(
-        'Гостиница не существует',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    if (!hotelRoom) {
-      throw new HttpException('Номер не найден', HttpStatus.BAD_REQUEST);
-    }
     body.images = [...hotelRoom.images, ...images];
     return await this.hotelRoomService.update(id, body);
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IHotelRoomService } from './interfaces/hotel-room-service.interface';
 import { ID } from 'src/types/id.type';
 import { ISearchRoomsParams } from './interfaces/search-rooms-params.interface';
@@ -27,6 +27,9 @@ export class HotelRoomService implements IHotelRoomService {
 
   public async findById(id: ID): Promise<HotelRoom> {
     const hotelRoom = await this.HotelRoomModel.findById(id);
+    if (!hotelRoom) {
+      throw new HttpException('Номер не найден', HttpStatus.BAD_REQUEST);
+    }
     return hotelRoom;
   }
 

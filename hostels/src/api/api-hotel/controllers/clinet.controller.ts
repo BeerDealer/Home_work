@@ -40,10 +40,6 @@ export class ClientController {
   ): Promise<Reservation> {
     const user = await this.userService.findByEmail(email);
     const room = await this.hotelRoomService.findById(body.hotelRoom);
-
-    if (!room) {
-      throw new HttpException('Такой номер не найден', HttpStatus.BAD_REQUEST);
-    }
     if (!room.isEnabled) {
       throw new HttpException('Номер недоступен', HttpStatus.BAD_REQUEST);
     }
@@ -85,9 +81,8 @@ export class ClientController {
   ): Promise<void> {
     const { _id: userId } = await this.userService.findByEmail(email);
     const { userId: reservationUserId } =
-      (await this.reservationService.getReservationById(id)) || {};
-    if (reservationUserId === undefined)
-      throw new HttpException('Бронь не существует', HttpStatus.BAD_REQUEST);
+      await this.reservationService.getReservationById(id);
+
     if (userId.toString() !== reservationUserId.toString())
       throw new HttpException(
         'Нельзя отменить бронь другого пользователя',

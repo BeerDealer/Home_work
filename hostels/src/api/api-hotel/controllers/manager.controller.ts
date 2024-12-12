@@ -38,7 +38,6 @@ export class ManagerController {
   async findAllReservations(
     @Param('userId') id: string,
   ): Promise<Reservation[]> {
-    console.log(id);
     return await this.reservationService.getReservations({
       userId: new Types.ObjectId(id),
     });
@@ -48,11 +47,6 @@ export class ManagerController {
   @UseGuards(SessionGuard, RolesGuard)
   @Role(UserRole.MANAGER)
   async deleteReservation(@Param('id') id: string): Promise<void> {
-    const { userId: reservationUserId } =
-      (await this.reservationService.getReservationById(id)) || {};
-    if (reservationUserId === undefined)
-      throw new HttpException('Бронь не существует', HttpStatus.BAD_REQUEST);
-
     await this.reservationService.removeReservation(id);
   }
 }

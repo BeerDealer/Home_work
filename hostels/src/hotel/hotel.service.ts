@@ -25,6 +25,12 @@ export class HotelService implements IHotelService {
 
   public async findById(id: ID): Promise<Hotel> {
     const hotel = await this.HotelModel.findById(id);
+    if (!hotel) {
+      throw new HttpException(
+        'Гостиница не существует',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return hotel;
   }
 
